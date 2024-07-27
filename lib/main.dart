@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   runZonedGuarded(
-    () => runApp(App()),
+    () => runApp(const App()),
     (error, stack) {
       log('Zone error: $error', error: error, stackTrace: stack);
     },
