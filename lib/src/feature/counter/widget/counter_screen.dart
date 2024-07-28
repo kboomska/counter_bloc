@@ -1,4 +1,5 @@
 import 'package:counter_bloc/src/feature/counter/bloc/counter_bloc.dart';
+import 'package:counter_bloc/src/feature/counter/bloc/counter_event.dart';
 import 'package:counter_bloc/src/feature/counter/bloc/counter_state.dart';
 import 'package:counter_bloc/src/feature/counter/widget/counter_provider.dart';
 import 'package:flutter/material.dart';
@@ -66,7 +67,7 @@ class _AgeIncrementWidget extends StatelessWidget {
     final bloc = CounterProvider.read<CounterBloc>(context);
 
     return ElevatedButton(
-      onPressed: bloc.incrementCounter,
+      onPressed: () => bloc.add(CounterEvent$Increment()),
       child: const Text('+'),
     );
   }
@@ -80,7 +81,7 @@ class _AgeDecrementWidget extends StatelessWidget {
     final bloc = CounterProvider.read<CounterBloc>(context);
 
     return ElevatedButton(
-      onPressed: bloc.decrementCounter,
+      onPressed: () => bloc.add(CounterEvent$Decrement()),
       child: const Text('-'),
     );
   }
