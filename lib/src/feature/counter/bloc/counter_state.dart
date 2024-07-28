@@ -1,31 +1,56 @@
 import 'package:counter_bloc/src/feature/counter/model/counter.dart';
 
-class CounterState {
+sealed class CounterState {
   const CounterState({
     required this.counter,
   });
 
   factory CounterState.initial() =>
-      const CounterState(counter: Counter(count: 0));
+      const CounterState$Idle(counter: Counter(count: 0));
+
+  factory CounterState.idle({
+    required Counter counter,
+  }) = CounterState$Idle;
+
+  factory CounterState.processing({
+    required Counter counter,
+  }) = CounterState$Processing;
 
   final Counter counter;
-
-  CounterState copyWith({
-    Counter? counter,
-  }) {
-    return CounterState(
-      counter: counter ?? this.counter,
-    );
-  }
-
-  @override
-  String toString() => '$CounterState(counter: $counter)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
     return other is CounterState && other.counter == counter;
+  }
+
+  @override
+  int get hashCode => counter.hashCode;
+}
+
+final class CounterState$Idle extends CounterState {
+  const CounterState$Idle({required super.counter});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is CounterState$Idle && other.counter == counter;
+  }
+
+  @override
+  int get hashCode => counter.hashCode;
+}
+
+final class CounterState$Processing extends CounterState {
+  const CounterState$Processing({required super.counter});
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is CounterState$Processing && other.counter == counter;
   }
 
   @override

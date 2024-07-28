@@ -3,13 +3,12 @@ import 'dart:math';
 
 import 'package:counter_bloc/src/feature/counter/bloc/counter_event.dart';
 import 'package:counter_bloc/src/feature/counter/bloc/counter_state.dart';
-import 'package:counter_bloc/src/feature/counter/model/counter.dart';
 
 class CounterBloc {
   CounterBloc({required CounterState initialState}) : _state = initialState {
     _stateStream = _streamController.stream
         .asyncExpand<CounterState>(_mapEventToState)
-        .asyncExpand(_updateState)
+        .asyncExpand<CounterState>(_updateState)
         .asBroadcastStream();
   }
 
@@ -28,6 +27,8 @@ class CounterBloc {
   }
 
   Stream<CounterState> _mapEventToState(CounterEvent event) async* {
+    yield CounterState.processing(counter: _state.counter);
+    await Future.delayed(const Duration(milliseconds: 400));
     yield switch (event) {
       CounterEvent$Increment() => _onCounterEvent$Increment(),
       CounterEvent$Decrement() => _onCounterEvent$Decrement(),
@@ -41,14 +42,16 @@ class CounterBloc {
   }
 
   CounterState _onCounterEvent$Increment() {
-    Counter counter = _state.counter;
-    counter = counter.copyWith(count: counter.count + 1);
-    return CounterState(counter: counter);
+    final count = _state.counter.count;
+    return CounterState.idle(
+      counter: _state.counter.copyWith(count: count + 1),
+    );
   }
 
   CounterState _onCounterEvent$Decrement() {
-    Counter counter = _state.counter;
-    counter = counter.copyWith(count: max(counter.count - 1, 0));
-    return CounterState(counter: counter);
+    final count = _state.counter.count;
+    return CounterState.idle(
+      counter: _state.counter.copyWith(count: max(count - 1, 0)),
+    );
   }
 }

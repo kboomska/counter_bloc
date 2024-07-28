@@ -14,9 +14,6 @@ class Counter {
   }
 
   @override
-  String toString() => '$Counter(count: $count)';
-
-  @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 

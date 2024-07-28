@@ -48,12 +48,15 @@ class _AgeTitle extends StatelessWidget {
       stream: bloc.stream,
       initialData: bloc.state,
       builder: (context, snapshot) {
-        final count = snapshot.requireData.counter.count;
-
-        return Text(
-          '$count',
-          textAlign: TextAlign.center,
-        );
+        return switch (snapshot.requireData) {
+          CounterState$Processing _ => const Center(
+              child: CircularProgressIndicator(),
+            ),
+          CounterState$Idle state => Text(
+              '${state.counter.count}',
+              textAlign: TextAlign.center,
+            ),
+        };
       },
     );
   }
